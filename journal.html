@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journal</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+      background: #ffffff;
+      color: #09090b;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+    header { margin-bottom: 2.5rem; }
+    h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.025em; }
+    .subtitle { color: #71717a; margin-top: 0.25rem; font-size: 0.875rem; }
+    nav { margin-bottom: 0.75rem; }
+    nav a {
+      color: #71717a;
+      text-decoration: none;
+      font-size: 0.8rem;
+      margin-right: 1rem;
+    }
+    nav a:hover { color: #09090b; }
+    nav a.active { color: #09090b; font-weight: 500; }
+    .day-nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .day-nav button {
+      background: none;
+      border: 1px solid #e4e4e7;
+      border-radius: 6px;
+      padding: 0.4rem 0.75rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      color: #71717a;
+    }
+    .day-nav button:hover { border-color: #a1a1aa; color: #09090b; }
+    .day-nav .current-date {
+      font-size: 0.9rem;
+      font-weight: 500;
+      flex: 1;
+    }
+    .entry { margin-bottom: 2rem; line-height: 1.7; }
+    .entry h1 { font-size: 1.2rem; margin-bottom: 1.5rem; color: #71717a; font-weight: 400; }
+    .entry p { margin-bottom: 0.75rem; }
+    .entry strong { font-weight: 600; }
+    .entry img {
+      max-width: 100%;
+      border-radius: 8px;
+      border: 1px solid #e4e4e7;
+      margin: 0.75rem 0;
+    }
+    .entry hr { border: none; border-top: 1px solid #f4f4f5; margin: 1.5rem 0; }
+    .no-entry {
+      color: #a1a1aa;
+      font-size: 0.875rem;
+      padding: 3rem 0;
+      text-align: center;
+    }
+    .date-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    .date-list a {
+      display: block;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid #e4e4e7;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #09090b;
+      font-size: 0.8rem;
+    }
+    .date-list a:hover { background: #f4f4f5; }
+    .date-list a.active { background: #09090b; color: #fff; border-color: #09090b; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="journal.html" class="active">Journal</a>
+    </nav>
+    <h1>Journal</h1>
+    <p class="subtitle">Thoughts, events, and everything in between.</p>
+  </header>
+
+  <div class="date-list" id="dates"></div>
+  <div class="entry" id="content"></div>
+
+  <script>
+    async function discoverDates() {
+      // Try fetching the journal index via GitHub API
+      try {
+        const resp = await fetch('https://api.github.com/repos/dizzyvn/life/contents/journal');
+        if (!resp.ok) throw new Error();
+        const files = await resp.json();
+        return files
+          .filter(f => f.name.endsWith('.md'))
+          .map(f => f.name.replace('.md', ''))
+          .sort()
+          .reverse();
+      } catch {
+        // Fallback: try recent dates
+        const dates = [];
+        const today = new Date();
+        for (let i = 0; i < 30; i++) {
+          const d = new Date(today);
+          d.setDate(d.getDate() - i);
+          dates.push(d.toISOString().split('T')[0]);
+        }
+        return dates;
+      }
+    }
+
+    async function loadEntry(date) {
+      try {
+        const resp = await fetch(`journal/${date}.md`);
+        if (!resp.ok) return null;
+        return await resp.text();
+      } catch { return null; }
+    }
+
+    function renderDates(dates, activeDate) {
+      const container = document.getElementById('dates');
+      container.innerHTML = '';
+      dates.forEach(date => {
+        const a = document.createElement('a');
+        a.href = '#';
+        a.textContent = date;
+        a.className = date === activeDate ? 'active' : '';
+        a.onclick = (e) => { e.preventDefault(); showDate(date, dates); };
+        container.appendChild(a);
+      });
+    }
+
+    async function showDate(date, dates) {
+      renderDates(dates, date);
+      const content = document.getElementById('content');
+      const md = await loadEntry(date);
+      if (md) {
+        content.innerHTML = marked.parse(md);
+        // Fix relative image paths
+        content.querySelectorAll('img').forEach(img => {
+          const src = img.getAttribute('src');
+          if (src && !src.startsWith('http') && !src.startsWith('/')) {
+            img.src = 'journal/' + src;
+          }
+        });
+      } else {
+        content.innerHTML = '<div class="no-entry">No entry for this day.</div>';
+      }
+      history.replaceState(null, '', `?date=${date}`);
+    }
+
+    async function init() {
+      const dates = await discoverDates();
+      const params = new URLSearchParams(window.location.search);
+      const requestedDate = params.get('date');
+      const activeDate = requestedDate && dates.includes(requestedDate)
+        ? requestedDate
+        : dates[0] || new Date().toISOString().split('T')[0];
+
+      if (dates.length > 0) {
+        await showDate(activeDate, dates);
+      } else {
+        document.getElementById('content').innerHTML =
+          '<div class="no-entry">No journal entries yet. Use /life-journal to start.</div>';
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>

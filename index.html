@@ -16,6 +16,10 @@
       max-width: 960px;
       margin: 0 auto;
     }
+    nav { margin-bottom: 0.75rem; }
+    nav a { color: #71717a; text-decoration: none; font-size: 0.8rem; margin-right: 1rem; }
+    nav a:hover { color: #09090b; }
+    nav a.active { color: #09090b; font-weight: 500; }
     h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.025em; }
     .subtitle { color: #71717a; margin-top: 0.25rem; margin-bottom: 2.5rem; font-size: 0.875rem; }
     .metric-card {
@@ -49,6 +53,10 @@
   </style>
 </head>
 <body>
+  <nav>
+    <a href="index.html" class="active">Dashboard</a>
+    <a href="journal.html">Journal</a>
+  </nav>
   <h1>Life Dashboard</h1>
   <p class="subtitle">Track what matters.</p>
   <div id="dashboard"></div>
