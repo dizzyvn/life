@@ -4,29 +4,34 @@ Personal goal tracking and reflection system, managed with Claude Code.
 
 ## Structure
 
-- **goals/** — Active goals and archived ones
+- **goals/** — Active goals (strategy: why, what done looks like)
 - **reflections/daily/** — End-of-day reflections (one per day)
 - **reflections/weekly/** — Weekly reviews (one per week)
 - **check-ins/** — Hourly check-in logs (JSONL, one file per day)
 - **.state/** — Running context for the reflection coach
 
-## Usage
+## GitHub Projects
+
+| Project | Type | Purpose |
+|---------|------|---------|
+| **AI Course Prep** | Focused Goal | #1 priority this month — April deadline |
+| **Get in Shape** | Focused Goal | Secondary focus — start gym habit |
+| **Life** | Catch-all | Everything else: Trusted AI strategy, relationships, one-off tasks |
+
+**Principle:** Only 2-3 Focused Goal Projects active at any time. Everything else lives in Life until it deserves deep attention.
+
+## Daily Workflow
 
 ```bash
-# Quick hourly check-in
-/reflect check-in
+# Morning: plan the day
+/life-plan
 
-# Recurring hourly check-ins
-/loop 1h /reflect check-in
+# During the day: hourly check-ins
+/loop 1h /life-reflect check-in
 
-# End of day review
-/reflect daily
+# Evening: review the day
+/life-reflect daily
 
-# Weekly review
-/reflect weekly
+# Friday: review the week
+/life-reflect weekly
 ```
-
-## GitHub Issues
-
-Major goals are also tracked as GitHub Issues with labels:
-`health`, `career`, `finance`, `learning`, `relationships`, `creative`

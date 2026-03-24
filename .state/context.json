@@ -9,17 +9,16 @@
     {"pattern": "no gym despite having one nearby", "days": 0, "first_noticed": "2026-03-24"}
   ],
   "commitments": [
-    {"what": "AI course prep — finalize syllabus", "when": "2026-04-01", "status": "pending"},
-    {"what": "Start gym habit — go at least 2x this week", "when": "2026-03-29", "status": "pending"},
-    {"what": "Line Yahoo offboarding — ship devices to Japan via DHL/FedEx", "when": "2026-04-02", "status": "pending", "next_action": "Package devices and ship by 3/26-27. Remote return guide found — no need to contact company."}
+    {"what": "AI course prep — finalize syllabus", "when": "2026-04-01", "status": "pending", "issue": 5},
+    {"what": "Start gym habit — go at least 2x this week", "when": "2026-03-29", "status": "pending", "issue": 9},
+    {"what": "Line Yahoo offboarding — ship devices", "when": "2026-04-02", "status": "pending", "issue": 12}
   ],
   "last_check_in": "2026-03-24",
   "last_daily": null,
   "last_weekly": null,
-  "github_issues": {
-    "health": 1,
-    "career": 2,
-    "learning": 3,
-    "relationships": 4
-  }
+  "focused_projects": {
+    "AI Course Prep": 2,
+    "Get in Shape": 3
+  },
+  "life_project": 4
 }
