@@ -155,9 +155,13 @@
           scales: {
             x: {
               type: 'time',
-              time: { unit: chartData.length > 60 ? 'month' : 'week', tooltipFormat: 'MMM d, yyyy' },
-              grid: { display: false },
-              ticks: { color: '#a1a1aa', font: { size: 11 } },
+              time: {
+                unit: chartData.length > 60 ? 'month' : chartData.length > 14 ? 'week' : 'day',
+                tooltipFormat: 'MMM d, yyyy',
+                displayFormats: { day: 'MMM d', week: 'MMM d', month: 'MMM yyyy' },
+              },
+              grid: { color: '#f4f4f5', drawTicks: true },
+              ticks: { color: '#a1a1aa', font: { size: 11 }, maxRotation: 0 },
               border: { display: false },
             },
             y: {
