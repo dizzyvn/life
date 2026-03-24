@@ -1,14 +1,15 @@
 {
   "current_focus": "thesis work",
   "streak": {
-    "daily_reflections": 0,
+    "daily_reflections": 1,
     "days_since_last_reflection": 0
   },
   "watch_patterns": [
-    {"pattern": "YouTube/browsing instead of thesis", "days": 1, "first_noticed": "2026-03-24"}
+    {"pattern": "YouTube/browsing instead of thesis", "days": 1, "first_noticed": "2026-03-24"},
+    {"pattern": "afternoon_distraction", "days": 1, "first_noticed": "2026-03-24"}
   ],
   "commitments": [],
   "last_check_in": "2026-03-24T12:13",
-  "last_daily": null,
+  "last_daily": "2026-03-24",
   "last_weekly": null
 }
