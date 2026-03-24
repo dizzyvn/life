@@ -9,21 +9,20 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #0d1117;
-      color: #e6edf3;
-      padding: 2rem;
-      max-width: 1000px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+      background: #ffffff;
+      color: #09090b;
+      padding: 2.5rem;
+      max-width: 960px;
       margin: 0 auto;
     }
-    h1 { font-size: 1.8rem; margin-bottom: 0.25rem; }
-    .subtitle { color: #8b949e; margin-bottom: 2rem; font-size: 0.9rem; }
+    h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.025em; }
+    .subtitle { color: #71717a; margin-top: 0.25rem; margin-bottom: 2.5rem; font-size: 0.875rem; }
     .metric-card {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
+      border: 1px solid #e4e4e7;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
     }
     .metric-header {
       display: flex;
@@ -31,34 +30,27 @@
       align-items: center;
       margin-bottom: 1rem;
     }
-    .metric-title { font-size: 1.1rem; font-weight: 600; }
-    .metric-stats {
-      display: flex;
-      gap: 1.5rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
+    .metric-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #09090b;
     }
-    .stat {
-      background: #0d1117;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
-      min-width: 100px;
+    .metric-latest {
+      font-size: 0.875rem;
+      color: #71717a;
     }
-    .stat-label { color: #8b949e; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; }
-    .stat-value { font-size: 1.3rem; font-weight: 600; margin-top: 0.2rem; }
-    .green { color: #3fb950; }
-    .yellow { color: #d29922; }
-    .red { color: #f85149; }
-    .muted { color: #8b949e; }
-    canvas { max-height: 300px; }
-    .no-data { color: #8b949e; font-style: italic; padding: 2rem; text-align: center; }
-    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 0.5rem; }
+    .no-data {
+      color: #a1a1aa;
+      font-size: 0.8rem;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    canvas { max-height: 200px; }
   </style>
 </head>
 <body>
   <h1>Life Dashboard</h1>
-  <p class="subtitle">Track what matters. Improve what you measure.</p>
+  <p class="subtitle">Track what matters.</p>
   <div id="dashboard"></div>
 
   <script>
@@ -82,15 +74,6 @@
       } catch { return []; }
     }
 
-    function movingAverage(data, window) {
-      return data.map((d, i) => {
-        const start = Math.max(0, i - window + 1);
-        const slice = data.slice(start, i + 1);
-        const avg = slice.reduce((s, v) => s + v.value, 0) / slice.length;
-        return { date: d.date, value: Math.round(avg * 100) / 100 };
-      });
-    }
-
     function weeklyCount(data) {
       const weeks = {};
       data.forEach(d => {
@@ -105,19 +88,6 @@
         .sort((a, b) => a.date.localeCompare(b.date));
     }
 
-    function isGood(value, goal, direction) {
-      if (direction === 'down') return value <= goal;
-      return value >= goal;
-    }
-
-    function colorClass(value, goal, direction) {
-      const diff = direction === 'down' ? value - goal : goal - value;
-      const range = Math.abs(goal) * 0.15 || 1;
-      if (diff <= 0) return 'green';
-      if (diff <= range) return 'yellow';
-      return 'red';
-    }
-
     function renderMetric(metric, data, container) {
       const card = document.createElement('div');
       card.className = 'metric-card';
@@ -128,83 +98,43 @@
       if (chartData.length === 0) {
         card.innerHTML = `
           <div class="metric-header">
-            <span class="metric-title"><span class="dot" style="background:${metric.color}"></span>${metric.name}</span>
-            <span class="muted">Goal: ${metric.goal} ${metric.unit}</span>
+            <span class="metric-title">${metric.name}</span>
           </div>
-          <div class="no-data">No data yet. Add entries to tracking/${metric.file}</div>`;
+          <div class="no-data">No data yet</div>`;
         container.appendChild(card);
         return;
       }
 
-      const current = chartData[chartData.length - 1].value;
-      const first = chartData[0].value;
-      const change = current - first;
-      const toGoal = metric.direction === 'down' ? current - metric.goal : metric.goal - current;
-      const cc = colorClass(current, metric.goal, metric.direction);
-      const changeGood = metric.direction === 'down' ? change <= 0 : change >= 0;
-
+      const latest = chartData[chartData.length - 1];
       const canvasId = 'chart-' + metric.id;
+
       card.innerHTML = `
         <div class="metric-header">
-          <span class="metric-title"><span class="dot" style="background:${metric.color}"></span>${metric.name}</span>
-          <span class="muted">Goal: ${metric.goal} ${metric.unit}</span>
-        </div>
-        <div class="metric-stats">
-          <div class="stat">
-            <div class="stat-label">Current</div>
-            <div class="stat-value">${current % 1 === 0 ? current : current.toFixed(1)} <small class="muted">${metric.unit}</small></div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">Change</div>
-            <div class="stat-value ${changeGood ? 'green' : 'red'}">${change >= 0 ? '+' : ''}${change.toFixed(1)}</div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">To Goal</div>
-            <div class="stat-value ${cc}">${toGoal <= 0 ? 'Done!' : toGoal.toFixed(1) + ' ' + metric.unit}</div>
-          </div>
-          <div class="stat">
-            <div class="stat-label">Entries</div>
-            <div class="stat-value">${data.length}</div>
-          </div>
+          <span class="metric-title">${metric.name}</span>
+          <span class="metric-latest">${latest.value % 1 === 0 ? latest.value : latest.value.toFixed(1)} ${metric.unit}</span>
         </div>
         <canvas id="${canvasId}"></canvas>`;
       container.appendChild(card);
 
-      const trend = chartData.length >= 3 ? movingAverage(chartData, 3) : null;
-      const allDates = chartData.map(d => d.date);
-
-      const datasets = [
-        {
-          label: metric.name,
-          data: chartData.map(d => ({ x: d.date, y: d.value })),
-          borderColor: metric.color,
-          backgroundColor: metric.color + '1a',
-          fill: true,
-          tension: 0.3,
-          pointRadius: chartData.length > 30 ? 2 : 4,
-          pointBackgroundColor: metric.color,
-          borderWidth: 2,
-        },
-      ];
-
-      if (trend) {
-        datasets.push({
-          label: 'Trend',
-          data: trend.map(d => ({ x: d.date, y: d.value })),
-          borderColor: '#8b949e',
-          borderDash: [5, 5],
-          pointRadius: 0,
-          borderWidth: 1.5,
-          fill: false,
-        });
-      }
+      const datasets = [{
+        label: metric.name,
+        data: chartData.map(d => ({ x: d.date, y: d.value })),
+        borderColor: metric.color,
+        backgroundColor: isAggregate ? metric.color + '33' : metric.color + '0d',
+        fill: !isAggregate,
+        tension: 0.4,
+        pointRadius: chartData.length > 30 ? 1 : 3,
+        pointBackgroundColor: metric.color,
+        borderWidth: 1.5,
+      }];
 
       if (metric.goal != null) {
+        const allDates = chartData.map(d => d.date);
         datasets.push({
-          label: 'Goal (' + metric.goal + ')',
+          label: 'Goal',
           data: allDates.map(d => ({ x: d, y: metric.goal })),
-          borderColor: '#3fb950',
-          borderDash: [10, 5],
+          borderColor: '#d4d4d8',
+          borderDash: [4, 4],
           pointRadius: 0,
           borderWidth: 1,
           fill: false,
@@ -212,31 +142,45 @@
       }
 
       const values = chartData.map(d => d.value);
-      const minVal = Math.min(...values, metric.goal || Infinity);
-      const maxVal = Math.max(...values, metric.goal || -Infinity);
-      const padding = (maxVal - minVal) * 0.15 || 1;
+      const minVal = Math.min(...values, metric.goal ?? Infinity);
+      const maxVal = Math.max(...values, metric.goal ?? -Infinity);
+      const padding = (maxVal - minVal) * 0.2 || 1;
 
       new Chart(document.getElementById(canvasId), {
         type: isAggregate ? 'bar' : 'line',
         data: { datasets },
         options: {
           responsive: true,
+          interaction: { intersect: false, mode: 'index' },
           scales: {
             x: {
               type: 'time',
               time: { unit: chartData.length > 60 ? 'month' : 'week', tooltipFormat: 'MMM d, yyyy' },
-              grid: { color: '#21262d' },
-              ticks: { color: '#8b949e' },
+              grid: { display: false },
+              ticks: { color: '#a1a1aa', font: { size: 11 } },
+              border: { display: false },
             },
             y: {
               min: Math.floor(minVal - padding),
               max: Math.ceil(maxVal + padding),
-              grid: { color: '#21262d' },
-              ticks: { color: '#8b949e', callback: v => v + ' ' + metric.unit },
+              grid: { color: '#f4f4f5' },
+              ticks: { color: '#a1a1aa', font: { size: 11 } },
+              border: { display: false },
             },
           },
           plugins: {
             legend: { display: false },
+            tooltip: {
+              backgroundColor: '#09090b',
+              titleFont: { size: 12 },
+              bodyFont: { size: 12 },
+              padding: 8,
+              cornerRadius: 6,
+              displayColors: false,
+              callbacks: {
+                label: ctx => ctx.parsed.y + ' ' + metric.unit,
+              },
+            },
           },
         },
       });
@@ -245,7 +189,6 @@
     async function render() {
       const config = await loadConfig();
       const dashboard = document.getElementById('dashboard');
-
       for (const metric of config) {
         const data = await loadCSV(metric.file);
         renderMetric(metric, data, dashboard);
