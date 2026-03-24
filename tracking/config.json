@@ -1,0 +1,39 @@
+[
+  {
+    "id": "weight",
+    "name": "Weight",
+    "file": "weight.csv",
+    "unit": "kg",
+    "goal": 63.0,
+    "direction": "down",
+    "color": "#58a6ff"
+  },
+  {
+    "id": "gym",
+    "name": "Gym Visits",
+    "file": "gym.csv",
+    "unit": "visits/week",
+    "goal": 3,
+    "direction": "up",
+    "color": "#3fb950",
+    "aggregate": "weekly-count"
+  },
+  {
+    "id": "sleep",
+    "name": "Sleep",
+    "file": "sleep.csv",
+    "unit": "hours",
+    "goal": 7.5,
+    "direction": "up",
+    "color": "#a371f7"
+  },
+  {
+    "id": "energy",
+    "name": "Energy",
+    "file": "energy.csv",
+    "unit": "/10",
+    "goal": 7,
+    "direction": "up",
+    "color": "#d29922"
+  }
+]
