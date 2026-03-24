@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weight Tracker</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      padding: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .subtitle { color: #8b949e; margin-bottom: 2rem; font-size: 0.9rem; }
+    .stats {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .stat {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      min-width: 120px;
+    }
+    .stat-label { color: #8b949e; font-size: 0.75rem; text-transform: uppercase; }
+    .stat-value { font-size: 1.5rem; font-weight: 600; margin-top: 0.25rem; }
+    .stat-value.green { color: #3fb950; }
+    .stat-value.yellow { color: #d29922; }
+    .stat-value.red { color: #f85149; }
+    .chart-container {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+    canvas { max-height: 400px; }
+  </style>
+</head>
+<body>
+  <h1>Weight Tracker</h1>
+  <p class="subtitle">Goal: 73kg → 63kg by March 2027</p>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Current</div>
+      <div class="stat-value" id="current">--</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Change</div>
+      <div class="stat-value" id="change">--</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">To Goal</div>
+      <div class="stat-value" id="to-goal">--</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Entries</div>
+      <div class="stat-value" id="entries">--</div>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="chart"></canvas>
+  </div>
+
+  <script>
+    const GOAL = 63.0;
+    const START = 73.0;
+
+    async function loadData() {
+      const resp = await fetch('weight.csv');
+      const text = await resp.text();
+      const lines = text.trim().split('\n').slice(1);
+      return lines
+        .map(line => {
+          const [date, weight] = line.split(',');
+          return { date: date.trim(), weight: parseFloat(weight.trim()) };
+        })
+        .filter(d => !isNaN(d.weight));
+    }
+
+    function movingAverage(data, window) {
+      return data.map((d, i) => {
+        const start = Math.max(0, i - window + 1);
+        const slice = data.slice(start, i + 1);
+        const avg = slice.reduce((s, v) => s + v.weight, 0) / slice.length;
+        return { date: d.date, weight: Math.round(avg * 10) / 10 };
+      });
+    }
+
+    async function render() {
+      const data = await loadData();
+      if (data.length === 0) return;
+
+      const current = data[data.length - 1].weight;
+      const first = data[0].weight;
+      const change = current - first;
+      const toGoal = current - GOAL;
+
+      document.getElementById('current').textContent = current.toFixed(1) + ' kg';
+      document.getElementById('entries').textContent = data.length;
+
+      const changeEl = document.getElementById('change');
+      changeEl.textContent = (change >= 0 ? '+' : '') + change.toFixed(1) + ' kg';
+      changeEl.className = 'stat-value ' + (change <= 0 ? 'green' : 'red');
+
+      const goalEl = document.getElementById('to-goal');
+      goalEl.textContent = toGoal.toFixed(1) + ' kg';
+      goalEl.className = 'stat-value ' + (toGoal <= 2 ? 'green' : toGoal <= 5 ? 'yellow' : 'red');
+
+      const trend = data.length >= 3 ? movingAverage(data, 3) : data;
+
+      const lastDate = new Date(data[data.length - 1].date);
+      const goalDate = new Date('2027-03-31');
+      const dates = data.map(d => d.date);
+      if (goalDate > lastDate) dates.push('2027-03-31');
+
+      new Chart(document.getElementById('chart'), {
+        type: 'line',
+        data: {
+          datasets: [
+            {
+              label: 'Weight',
+              data: data.map(d => ({ x: d.date, y: d.weight })),
+              borderColor: '#58a6ff',
+              backgroundColor: 'rgba(88, 166, 255, 0.1)',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 4,
+              pointBackgroundColor: '#58a6ff',
+              borderWidth: 2,
+            },
+            ...(data.length >= 3 ? [{
+              label: 'Trend (3-pt avg)',
+              data: trend.map(d => ({ x: d.date, y: d.weight })),
+              borderColor: '#d29922',
+              borderDash: [5, 5],
+              pointRadius: 0,
+              borderWidth: 1.5,
+              fill: false,
+            }] : []),
+            {
+              label: 'Goal (63kg)',
+              data: dates.map(d => ({ x: d, y: GOAL })),
+              borderColor: '#3fb950',
+              borderDash: [10, 5],
+              pointRadius: 0,
+              borderWidth: 1.5,
+              fill: false,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: {
+              type: 'time',
+              time: { unit: 'week', tooltipFormat: 'MMM d, yyyy' },
+              grid: { color: '#21262d' },
+              ticks: { color: '#8b949e' },
+            },
+            y: {
+              min: GOAL - 2,
+              max: Math.max(START + 1, ...data.map(d => d.weight)) + 1,
+              grid: { color: '#21262d' },
+              ticks: { color: '#8b949e', callback: v => v + ' kg' },
+            },
+          },
+          plugins: {
+            legend: { labels: { color: '#e6edf3' } },
+          },
+        },
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>
