@@ -10,15 +10,11 @@ Personal goal tracking and reflection system, managed with Claude Code.
 - **check-ins/** — Hourly check-in logs (JSONL, one file per day)
 - **.state/** — Running context for the reflection coach
 
-## GitHub Projects
+## GitHub Project
 
-| Project | Type | Purpose |
-|---------|------|---------|
-| **AI Course Prep** | Focused Goal | #1 priority this month — April deadline |
-| **Get in Shape** | Focused Goal | Secondary focus — start gym habit |
-| **Life** | Catch-all | Everything else: Trusted AI strategy, relationships, one-off tasks |
-
-**Principle:** Only 2-3 Focused Goal Projects active at any time. Everything else lives in Life until it deserves deep attention.
+One **Life** project board holds everything. Issues are tasks/milestones with checkboxes.
+Labels (`health`, `career`, `learning`, `relationships`) filter by goal area.
+Board columns show what's active vs. backlog.
 
 ## Daily Workflow
 
