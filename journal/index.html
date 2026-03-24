@@ -87,8 +87,9 @@
 <body>
   <header>
     <nav>
-      <a href="index.html">Dashboard</a>
-      <a href="journal.html" class="active">Journal</a>
+      <a href="../">Home</a>
+      <a href="../tracking/">Tracking</a>
+      <a href="./" class="active">Journal</a>
     </nav>
     <h1>Journal</h1>
     <p class="subtitle">Thoughts, events, and everything in between.</p>
@@ -124,7 +125,7 @@
 
     async function loadEntry(date) {
       try {
-        const resp = await fetch(`journal/${date}.md`);
+        const resp = await fetch(`${date}.md`);
         if (!resp.ok) return null;
         return await resp.text();
       } catch { return null; }
@@ -153,7 +154,7 @@
         content.querySelectorAll('img').forEach(img => {
           const src = img.getAttribute('src');
           if (src && !src.startsWith('http') && !src.startsWith('/')) {
-            img.src = 'journal/' + src;
+            img.src = src;
           }
         });
       } else {
