@@ -15,12 +15,13 @@ Update this file anytime your routine, location, or priorities shift.
 
 | Block | Time | Best for | Notes |
 |-------|------|----------|-------|
-| Morning focus | 08:00-10:00 | Deep work, hardest tasks | Best concentration, protect this |
+| School drop-off | 07:30-08:30 | Send kid to school | Non-negotiable daily commitment |
+| Morning focus | 08:30-10:00 | Deep work, hardest tasks | Best concentration, protect this |
 | Late morning | 10:00-12:00 | Meetings, lighter work | Meetings often land here |
 | Lunch | 12:00-13:00 | Break, walk | Protect — tendency to skip meals |
 | Early afternoon | 13:00-15:00 | Admin, email, lighter tasks | Energy dips after lunch |
 | Late afternoon | 15:00-17:00 | Second focus block or gym | Good for creative work |
-| Gym | 17:00-18:00 | Exercise | Gym is nearby, go before family time |
+| School pick-up | 17:00-18:00 | Pick up kid from school | Non-negotiable daily commitment |
 | Family time | 18:00+ | Family, dinner | Hard stop on work |
 
 ### Boundaries
