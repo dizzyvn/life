@@ -1,18 +1,19 @@
 {
-  "current_focus": "Prepare AI course (April 2026 deadline)",
+  "current_focus": "Line Yahoo handover (morning) → Ugate frontend → AI course + agent exploration (afternoon)",
   "streak": {
-    "daily_reflections": 1,
+    "daily_reflections": 2,
     "days_since_last_reflection": 0
   },
   "watch_patterns": [
     {"pattern": "late-night eating after working late", "days": 0, "first_noticed": "2026-03-24"},
-    {"pattern": "no gym despite having one nearby", "days": 1, "first_noticed": "2026-03-24"}
+    {"pattern": "gym started — keep momentum", "days": 0, "first_noticed": "2026-03-24"}
   ],
   "commitments": [
-    {"what": "AI course prep — finalize syllabus", "when": "2026-04-01", "status": "pending", "issue": 5},
-    {"what": "Start gym habit — go at least 2x this week", "when": "2026-03-29", "status": "pending", "issue": 9},
-    {"what": "Line Yahoo offboarding — ship devices", "when": "2026-04-02", "status": "pending", "issue": 12},
-    {"what": "Review 7 generated slide packages", "when": "2026-03-25", "status": "pending"}
+    {"what": "Line Yahoo handover — finalize and hand over work", "when": "2026-03-27", "status": "pending", "issue": 13},
+    {"what": "Ugate frontend — upload + manage docs + chat", "when": "2026-03-25", "status": "pending"},
+    {"what": "AI course prep — 2h afternoon block", "when": "2026-03-25", "status": "pending", "issue": 5},
+    {"what": "Explore agent direction for Trusted AI", "when": "2026-03-25", "status": "pending"},
+    {"what": "Gym 2x this week (1 done, need 1 more)", "when": "2026-03-29", "status": "pending", "issue": 9}
   ],
   "last_check_in": "2026-03-24",
   "last_daily": "2026-03-24",
