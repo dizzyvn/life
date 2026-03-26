@@ -1,22 +1,24 @@
 {
-  "current_focus": "Line Yahoo handover (morning) → Ugate frontend → AI course + agent exploration (afternoon)",
+  "current_focus": "Ugate frontend (hard deadline 2026-03-29) → agent direction discussion → RAG learning",
   "streak": {
-    "daily_reflections": 2,
+    "daily_reflections": 3,
     "days_since_last_reflection": 0
   },
   "watch_patterns": [
     {"pattern": "late-night eating after working late", "days": 0, "first_noticed": "2026-03-24"},
-    {"pattern": "gym started — keep momentum", "days": 0, "first_noticed": "2026-03-24"}
+    {"pattern": "gym momentum stalled — no gym since 2026-03-24", "days": 1, "first_noticed": "2026-03-25"},
+    {"pattern": "AI course prep skipped 2 days in a row — reframed to learning tasks", "days": 0, "first_noticed": "2026-03-25"},
+    {"pattern": "agent-idle-hands — context switching when agent is coding", "days": 0, "first_noticed": "2026-03-25"}
   ],
   "commitments": [
-    {"what": "Line Yahoo handover — finalize and hand over work", "when": "2026-03-27", "status": "pending", "issue": 13},
-    {"what": "Ugate frontend — upload + manage docs + chat", "when": "2026-03-25", "status": "pending"},
-    {"what": "AI course prep — 2h afternoon block", "when": "2026-03-25", "status": "pending", "issue": 5},
-    {"what": "Explore agent direction for Trusted AI", "when": "2026-03-25", "status": "pending"},
-    {"what": "Gym 2x this week (1 done, need 1 more)", "when": "2026-03-29", "status": "pending", "issue": 9}
+    {"what": "Ugate frontend — ship by end of week", "when": "2026-03-29", "status": "in_progress", "issue": 21},
+    {"what": "Discuss agent direction with teammate", "when": "2026-03-26", "status": "pending"},
+    {"what": "RAG learning tasks (pipeline quality, evaluation, observability)", "when": "ongoing", "status": "pending", "issues": [15, 16, 17]},
+    {"what": "Gym — need 1 more session this week", "when": "2026-03-29", "status": "pending", "issue": 9},
+    {"what": "Line Yahoo — ship devices", "when": "2026-04-02", "status": "pending", "issue": 12}
   ],
   "last_check_in": "2026-03-24",
-  "last_daily": "2026-03-24",
+  "last_daily": "2026-03-25",
   "last_weekly": null,
   "project": 4
 }
