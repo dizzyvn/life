@@ -1,2 +1,4 @@
 # Keep .state tracked so context persists across machines
-# Nothing to ignore for now
+
+# Sensitive / private notes — never commit
+secret.md
