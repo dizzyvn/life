@@ -1,21 +1,22 @@
 {
-  "current_focus": "Ugate frontend (hard deadline 2026-03-29) → agent direction discussion → RAG learning",
+  "current_focus": "AI course lecture prep (hard deadline April 2026) → Line Yahoo ship devices (2026-03-31) → RAG learning",
   "streak": {
     "daily_reflections": 3,
-    "days_since_last_reflection": 0
+    "days_since_last_reflection": 5
   },
   "watch_patterns": [
     {"pattern": "late-night eating after working late", "days": 0, "first_noticed": "2026-03-24"},
-    {"pattern": "gym momentum stalled — no gym since 2026-03-24", "days": 1, "first_noticed": "2026-03-25"},
-    {"pattern": "AI course prep skipped 2 days in a row — reframed to learning tasks", "days": 0, "first_noticed": "2026-03-25"},
+    {"pattern": "gym momentum stalled — no gym since 2026-03-24", "days": 6, "first_noticed": "2026-03-25"},
+    {"pattern": "Monday cold-start — consistently least productive day", "days": 0, "first_noticed": "2026-03-30"},
     {"pattern": "agent-idle-hands — context switching when agent is coding", "days": 0, "first_noticed": "2026-03-25"}
   ],
   "commitments": [
-    {"what": "Ugate frontend — ship by end of week", "when": "2026-03-29", "status": "in_progress", "issue": 21},
-    {"what": "Discuss agent direction with teammate", "when": "2026-03-26", "status": "pending"},
+    {"what": "Ugate frontend — demo + transfer work", "when": "2026-03-29", "status": "done", "issue": 21},
+    {"what": "AI course lecture preparation", "when": "2026-04-30", "status": "in_progress"},
+    {"what": "Line Yahoo — ship devices", "when": "2026-03-31", "status": "pending", "issue": 12},
     {"what": "RAG learning tasks (pipeline quality, evaluation, observability)", "when": "ongoing", "status": "pending", "issues": [15, 16, 17]},
-    {"what": "Gym — need 1 more session this week", "when": "2026-03-29", "status": "pending", "issue": 9},
-    {"what": "Line Yahoo — ship devices", "when": "2026-04-02", "status": "pending", "issue": 12}
+    {"what": "Gym — restart habit", "when": "ongoing", "status": "pending", "issue": 9},
+    {"what": "Discuss agent direction with teammate", "when": "TBD", "status": "pending"}
   ],
   "last_check_in": "2026-03-24",
   "last_daily": "2026-03-25",
